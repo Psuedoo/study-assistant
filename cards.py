@@ -1,4 +1,8 @@
+import os
 import random
+import pathlib
+import json
+
 
 # TODO:
 #   - Fix displaying cards in a list
@@ -20,7 +24,7 @@ class Card:
         self.prompt = prompt
         self.answer = answer
         self.guessed_status = False
-    
+
     def check_answer(self, user_answer):
         if self.answer == user_answer:
             self.guessed_status = True
@@ -39,6 +43,9 @@ class Card:
                 guesses += 1
         return 100 - (guesses * 25)
 
+    def convert_to_json(self, indent_level=None, sep=(', ', ': ')):
+        return json.dumps(self.__dict__, indent=indent_level, separators=sep)
+
 
 class CardSet:
     def __init__(self, cards=None):
@@ -56,23 +63,42 @@ class CardSet:
             self.cards[s_index] = f_value
             self.cards[f_index] = s_value
 
-
     def add_card(self, card):
         self.cards.append(card)
 
-    def display(self):
-        print([{
-            'prompt': card.prompt,
-            'answer': card.answer,
-            'status': card.guessed_status,
-        } for card in self.cards])
+    def display(self, side=None):
+        if not side:
+            print(
+                [
+                    {
+                        'prompt': card.prompt,
+                        'answer': card.answer,
+                        'status': card.guessed_status
+                    }
+                    for card in self.cards
+                ]
+            )
 
-    def display_prompts(self):
-        print([
-            {
-                
-            } for card in self.cards])
-    
+        if side == 'prompt':
+            print(
+                [
+                    {
+                        card.prompt
+                    }
+                    for card in self.cards
+                ]
+            )
+
+        if side == 'answer':
+            print(
+                [
+                    {
+                        card.answer
+                    }
+                    for card in self.cards
+                ]
+            )
+
     def study(self):
         for card in self.cards:
             score = card.study()
@@ -80,8 +106,6 @@ class CardSet:
                 self.score += 1
             else:
                 continue
-
-
 
 
 tagalog = CardSet([
@@ -104,7 +128,6 @@ tagalog = CardSet([
     Card('Egg', 'Ilog')
 ])
 
-tagalog.display()
-print('Shuffling...')
-tagalog.shuffle()
-tagalog.display()
+c = tagalog.cards[0].convert_to_json()
+print(c)
+
