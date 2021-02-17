@@ -80,8 +80,14 @@ class CardSet:
 
     def load_json_file(self):
         with open(f'{self.name}.json', 'r') as file:
-             return json.load(file)
+            json_data = json.load(file)
 
+        imported_cards = []
+        for card in json_data:
+            prompt = [x for x in card][0]
+            answer = [x['answer'] for x in card.values()][0]
+            imported_cards.append(Card(prompt, answer))
+        self.cards = imported_cards
 
     def display(self, side=None):
         if not side:
