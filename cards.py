@@ -48,7 +48,8 @@ class Card:
 
 
 class CardSet:
-    def __init__(self, cards=None):
+    def __init__(self, name, cards=None):
+        self.name = name
         self.score = 0
         if cards:
             self.cards = cards
@@ -66,8 +67,8 @@ class CardSet:
     def add_card(self, card):
         self.cards.append(card)
 
-    def save_json_file(self, name):
-        json_file = open(f'{name}.json', 'w')
+    def save_json_file(self):
+        json_file = open(f'{self.name}.json', 'w')
         cards = [{
             card.prompt: {
                 'answer': card.answer,
@@ -76,6 +77,11 @@ class CardSet:
         } for card in self.cards]
         json.dump(cards, json_file, indent=4)
         json_file.close()
+
+    def load_json_file(self):
+        with open(f'{self.name}.json', 'r') as file:
+             return json.load(file)
+
 
     def display(self, side=None):
         if not side:
@@ -117,6 +123,3 @@ class CardSet:
                 self.score += 1
             else:
                 continue
-
-
-

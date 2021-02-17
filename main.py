@@ -1,6 +1,6 @@
 from cards import *
 
-tagalog = CardSet([
+tagalog = CardSet('tagalog', [
     Card('Good Morning', 'Magandang umaga'),
     Card('Good Noon', 'Magandang tanghali'),
     Card('Good Afternoon', 'Magandang hapon'),
@@ -20,7 +20,13 @@ tagalog = CardSet([
     Card('Egg', 'Ilog')
 ])
 
-# c = tagalog.cards[0].convert_to_json()
-# print(c)
+#c = tagalog.cards[0].convert_to_json()
+#print(c)
 
-tagalog.save_json_file('tagalog')
+#tagalog.save_json_file()
+
+json_data = tagalog.load_json_file()
+
+# TODO: Find a way to convert these data entries back into objects
+for card in json_data:
+    print(card)
